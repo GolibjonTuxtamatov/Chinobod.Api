@@ -1,3 +1,4 @@
+using Chinobod.Api.Brokers.DateTimes;
 using Chinobod.Api.Brokers.Loggings;
 using Chinobod.Api.Brokers.Storages;
 using Chinobod.Api.Services.Foundations;
@@ -38,6 +39,7 @@ static void AddBrokers(WebApplicationBuilder builder)
     builder.Services.AddDbContext<StorageBroker>();
     builder.Services.AddTransient<IStorageBroker, StorageBroker>();
     builder.Services.AddTransient<ILoggingBroker, LoggingBroker>();
+    builder.Services.AddTransient<IDateTimeBroker, DateTimeBroker>();
 }
 
 static void AddServices(WebApplicationBuilder builder)
