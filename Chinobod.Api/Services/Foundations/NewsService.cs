@@ -7,7 +7,7 @@ using Xeptions;
 
 namespace Chinobod.Api.Services.Foundations
 {
-    public class NewsService : INewsService
+    public partial class NewsService : INewsService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -24,20 +24,13 @@ namespace Chinobod.Api.Services.Foundations
 
         }
 
-        public async ValueTask<News> AddNewsAsync(News news)
-        {
-            try
+        public ValueTask<News> AddNewsAsync(News news) =>
+            TryCatch(async () =>
             {
-                if (news == null)
-                    throw new NullNewsException();
+                ValidateNotNull(news);
 
                 return await this.storageBroker.InsertNewsAsync(news);
-            }
-            catch(NullNewsException nullNewsException)
-            {
-                throw CreateAndLogValidationException(nullNewsException);
-            }
-        }
+            });
 
         public async ValueTask<News> ModifyNewsAsync(News news) =>
             await this.storageBroker.UpdateNewsAsync(news);
@@ -55,15 +48,5 @@ namespace Chinobod.Api.Services.Foundations
 
         public async ValueTask<News> SelectNewsByIdAsync(Guid id) =>
             await this.SelectNewsByIdAsync(id);
-
-        private Xeption CreateAndLogValidationException(Xeption exception)
-        {
-            var newsValidationException =
-                new NewsValidationException(exception);
-
-            this.loggingBroker.LogError(newsValidationException);
-
-            return newsValidationException;
-        }
     }
 }
