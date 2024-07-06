@@ -23,7 +23,7 @@ namespace Chinobod.Api.Services.Foundations
         }
 
         public async ValueTask<News> AddNewsASync(News news) =>
-            throw new NotImplementedException();
+            await this.storageBroker.InsertNewsAsync(news);
 
         public async ValueTask<News> ModifyNewsAsync(News news) =>
             await this.storageBroker.UpdateNewsAsync(news);
