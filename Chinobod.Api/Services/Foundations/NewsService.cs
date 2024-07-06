@@ -1,4 +1,6 @@
-﻿using Chinobod.Api.Brokers.Storages;
+﻿using Chinobod.Api.Brokers.DateTimes;
+using Chinobod.Api.Brokers.Loggings;
+using Chinobod.Api.Brokers.Storages;
 using Chinobod.Api.Models.Foundations;
 
 namespace Chinobod.Api.Services.Foundations
@@ -6,12 +8,22 @@ namespace Chinobod.Api.Services.Foundations
     public class NewsService : INewsService
     {
         private readonly IStorageBroker storageBroker;
+        private readonly ILoggingBroker loggingBroker;
+        private readonly IDateTimeBroker dateTimeBroker;
 
-        public NewsService(IStorageBroker storageBroker) =>
+        public NewsService(
+            IStorageBroker storageBroker,
+            ILoggingBroker loggingBroker,
+            IDateTimeBroker dateTimeBroker)
+        {
             this.storageBroker = storageBroker;
+            this.loggingBroker = loggingBroker;
+            this.dateTimeBroker = dateTimeBroker;
+
+        }
 
         public async ValueTask<News> AddNewsASync(News news) =>
-            await this.storageBroker.InsertNewsAsync(news);
+            throw new NotImplementedException();
 
         public async ValueTask<News> ModifyNewsAsync(News news) =>
             await this.storageBroker.UpdateNewsAsync(news);
