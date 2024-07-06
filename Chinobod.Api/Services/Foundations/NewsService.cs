@@ -1,7 +1,7 @@
 ﻿using Chinobod.Api.Brokers.DateTimes;
 using Chinobod.Api.Brokers.Loggings;
 using Chinobod.Api.Brokers.Storages;
-using Chinobod.Api.Models.Foundations;
+using Chinobod.Api.Models.Foundations.News;
 
 namespace Chinobod.Api.Services.Foundations
 {

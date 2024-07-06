@@ -1,4 +1,4 @@
-﻿using Chinobod.Api.Models.Foundations;
+﻿using Chinobod.Api.Models.Foundations.News;
 
 namespace Chinobod.Api.Services.Foundations
 {

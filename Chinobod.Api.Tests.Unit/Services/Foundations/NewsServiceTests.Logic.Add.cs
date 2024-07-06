@@ -1,4 +1,4 @@
-﻿using Chinobod.Api.Models.Foundations;
+﻿using Chinobod.Api.Models.Foundations.News;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;

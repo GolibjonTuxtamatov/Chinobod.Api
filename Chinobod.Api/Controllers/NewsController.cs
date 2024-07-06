@@ -1,4 +1,4 @@
-﻿using Chinobod.Api.Models.Foundations;
+﻿using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Services.Foundations;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;

@@ -1,10 +1,13 @@
-﻿using Chinobod.Api.Brokers.DateTimes;
+﻿using System.Linq.Expressions;
+using Chinobod.Api.Brokers.DateTimes;
 using Chinobod.Api.Brokers.Loggings;
 using Chinobod.Api.Brokers.Storages;
-using Chinobod.Api.Models.Foundations;
+using Chinobod.Api.Models.Foundations.News;
+using Chinobod.Api.Models.Foundations.News.Exceptions;
 using Chinobod.Api.Services.Foundations;
 using Moq;
 using Tynamix.ObjectFiller;
+using Xeptions;
 
 namespace Chinobod.Api.Tests.Unit.Services.Foundations
 {
@@ -41,5 +44,10 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             return newsFiller;
         }
+
+
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption exception) =>
+            actualException => actualException.SameExceptionAs(exception);
     }
 }
