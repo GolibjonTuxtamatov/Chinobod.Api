@@ -22,7 +22,7 @@ namespace Chinobod.Api.Services.Foundations
 
         }
 
-        public async ValueTask<News> AddNewsASync(News news) =>
+        public async ValueTask<News> AddNewsAsync(News news) =>
             await this.storageBroker.InsertNewsAsync(news);
 
         public async ValueTask<News> ModifyNewsAsync(News news) =>

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chinobod.Api.Models.Foundations;
+﻿using Chinobod.Api.Models.Foundations;
 using FluentAssertions;
 using Force.DeepCloner;
 using Moq;
@@ -27,7 +22,7 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             //when
             News actualNews =
-                await this.newsService.AddNewsASync(inputNews);
+                await this.newsService.AddNewsAsync(inputNews);
 
             //then
             actualNews.Should().BeEquivalentTo(expectedNews);

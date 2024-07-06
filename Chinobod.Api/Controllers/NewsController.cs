@@ -17,7 +17,7 @@ namespace Chinobod.Api.Controllers
         [HttpPost]
         public async ValueTask<ActionResult<News>> PostNewsAsync(News news)
         {
-            News postedNews = await this.newsService.AddNewsASync(news);
+            News postedNews = await this.newsService.AddNewsAsync(news);
 
             return Created(postedNews);
         }
