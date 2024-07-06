@@ -2,6 +2,8 @@
 using Chinobod.Api.Brokers.Loggings;
 using Chinobod.Api.Brokers.Storages;
 using Chinobod.Api.Models.Foundations.News;
+using Chinobod.Api.Models.Foundations.News.Exceptions;
+using Xeptions;
 
 namespace Chinobod.Api.Services.Foundations
 {
@@ -22,8 +24,20 @@ namespace Chinobod.Api.Services.Foundations
 
         }
 
-        public async ValueTask<News> AddNewsAsync(News news) =>
-            await this.storageBroker.InsertNewsAsync(news);
+        public async ValueTask<News> AddNewsAsync(News news)
+        {
+            try
+            {
+                if (news == null)
+                    throw new NullNewsException();
+
+                return await this.storageBroker.InsertNewsAsync(news);
+            }
+            catch(NullNewsException nullNewsException)
+            {
+                throw CreateAndLogValidationException(nullNewsException);
+            }
+        }
 
         public async ValueTask<News> ModifyNewsAsync(News news) =>
             await this.storageBroker.UpdateNewsAsync(news);
@@ -41,5 +55,15 @@ namespace Chinobod.Api.Services.Foundations
 
         public async ValueTask<News> SelectNewsByIdAsync(Guid id) =>
             await this.SelectNewsByIdAsync(id);
+
+        private Xeption CreateAndLogValidationException(Xeption exception)
+        {
+            var newsValidationException =
+                new NewsValidationException(exception);
+
+            this.loggingBroker.LogError(newsValidationException);
+
+            return newsValidationException;
+        }
     }
 }
