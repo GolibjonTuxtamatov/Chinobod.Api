@@ -5,7 +5,7 @@ namespace Chinobod.Api.Services.Foundations
 {
     public partial class NewsService
     {
-        private void ValidateNotNull(News nullNews)
+        private static void ValidateNotNull(News nullNews)
         {
             if (nullNews == null)
                 throw new NullNewsException();
