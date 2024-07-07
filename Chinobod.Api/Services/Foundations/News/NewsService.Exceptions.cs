@@ -42,7 +42,7 @@ namespace Chinobod.Api.Services.Foundations
 
             return newsValidationException;
         }
-        
+
         private Xeption CreateAndLogCriticalDependencyValidationException(Xeption exception)
         {
 

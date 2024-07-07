@@ -2,8 +2,6 @@
 using Chinobod.Api.Brokers.Loggings;
 using Chinobod.Api.Brokers.Storages;
 using Chinobod.Api.Models.Foundations.News;
-using Chinobod.Api.Models.Foundations.News.Exceptions;
-using Xeptions;
 
 namespace Chinobod.Api.Services.Foundations
 {

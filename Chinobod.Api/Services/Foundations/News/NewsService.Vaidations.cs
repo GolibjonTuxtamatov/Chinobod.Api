@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Chinobod.Api.Models.Foundations.News;
+﻿using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Models.Foundations.News.Exceptions;
 
 namespace Chinobod.Api.Services.Foundations
@@ -51,13 +50,13 @@ namespace Chinobod.Api.Services.Foundations
         {
             DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
 
-            if(currentDate == earlierDate)
+            if (currentDate == earlierDate)
                 return true;
 
             return false;
         }
 
-        private static void Validate(params (dynamic Rule,string Parameter)[] values)
+        private static void Validate(params (dynamic Rule, string Parameter)[] values)
         {
             var invalidNewsException = new InvalidNewsException();
 

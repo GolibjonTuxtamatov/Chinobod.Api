@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using Chinobod.Api.Models.Foundations.News;
+﻿using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Models.Foundations.News.Exceptions;
 using FluentAssertions;
 using Moq;
@@ -35,7 +34,7 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedNewsValidationException)))
-                    ,Times.Once);
+                    , Times.Once);
 
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertNewsAsync(It.IsAny<News>()),
