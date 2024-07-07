@@ -30,6 +30,9 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
                                            this.dateTimeBrokerMock.Object);
         }
 
+        private static string CreateRandomString() =>
+            new MnemonicString().GetValue();
+
         private SqlException GetSqlException() =>
             (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 

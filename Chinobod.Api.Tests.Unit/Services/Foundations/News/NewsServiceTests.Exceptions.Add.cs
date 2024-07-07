@@ -1,5 +1,6 @@
 ﻿using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Models.Foundations.News.Exceptions;
+using EFxceptions.Models.Exceptions;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;
 using Moq;
@@ -46,6 +47,50 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
             this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
+
+        [Fact]
+        public async Task ShouldThrowValidationDependencyExceptionOnAddIfDuplicateKeyErrorOccurs()
+        {
+            //given
+            DateTimeOffset randomTime = GetRandomDateTime();
+            News someNews = CreateRandomNews(randomTime);
+            string randomString = CreateRandomString();
+
+            var duplicateKeyException =
+                new DuplicateKeyException(randomString);
+
+            var alreadyExistNewsException =
+                new AlreadyExistNewsException(duplicateKeyException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Throws(duplicateKeyException);
+
+            var expectedNewsDependenccyValidationException =
+                new NewsDependencyValidationException(alreadyExistNewsException);
+
+            //when
+            ValueTask<News> addNewsTask =
+                this.newsService.AddNewsAsync(someNews);
+
+            NewsDependencyValidationException actualNewsDependencyValidationException =
+                await Assert.ThrowsAsync<NewsDependencyValidationException>(addNewsTask.AsTask);
+
+            //
+            actualNewsDependencyValidationException.Should().BeEquivalentTo(expectedNewsDependenccyValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertNewsAsync(someNews),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedNewsDependenccyValidationException))),
+                    Times.Once);
         }
     }
 }
