@@ -99,5 +99,52 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfCreatedDateIsPreviousAndLogItAsync()
+        {
+            //given
+            DateTimeOffset earlierDate = GetEarlierDateTime();
+            News someNews = CreateRandomNews(earlierDate);
+
+            var invalidNewsException = new InvalidNewsException();
+
+            invalidNewsException.AddData(
+                key: nameof(News.CreatedDate),
+                values: "Date should be now");
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Returns(earlierDate);
+
+            var expectedNewsValidationException =
+                new NewsValidationException(invalidNewsException);
+
+            //when
+            ValueTask<News> addNewsTask =
+                this.newsService.AddNewsAsync(someNews);
+
+            NewsValidationException actualNewsVlidationException =
+                await Assert.ThrowsAsync<NewsValidationException>(addNewsTask.AsTask);
+
+            //then
+            actualNewsVlidationException.Should().BeEquivalentTo(expectedNewsValidationException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedNewsValidationException))),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertNewsAsync(It.IsAny<News>()),
+                    Times.Never);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }

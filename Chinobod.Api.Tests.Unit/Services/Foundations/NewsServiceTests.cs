@@ -31,6 +31,14 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
         private DateTimeOffset GetRandomDateTime() =>
             DateTimeOffset.UtcNow;
+
+        private DateTimeOffset GetEarlierDateTime()
+        {
+            var someTime = new TimeSpan(1,2,30,0);
+
+            return DateTimeOffset.UtcNow - someTime;
+        }
+
         private News CreateRandomNews(DateTimeOffset dateTimeOffset) =>
             CreateNewsFiller(dateTimeOffset).Create();
 
