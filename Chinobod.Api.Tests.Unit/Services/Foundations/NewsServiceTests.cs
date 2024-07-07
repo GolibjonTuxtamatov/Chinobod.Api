@@ -1,10 +1,12 @@
 ﻿using System.Linq.Expressions;
+using System.Runtime.Serialization;
 using Chinobod.Api.Brokers.DateTimes;
 using Chinobod.Api.Brokers.Loggings;
 using Chinobod.Api.Brokers.Storages;
 using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Models.Foundations.News.Exceptions;
 using Chinobod.Api.Services.Foundations;
+using Microsoft.Data.SqlClient;
 using Moq;
 using Tynamix.ObjectFiller;
 using Xeptions;
@@ -28,6 +30,9 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
                                            this.loggingBrokerMock.Object,
                                            this.dateTimeBrokerMock.Object);
         }
+
+        private SqlException GetSqlException() =>
+            (SqlException)FormatterServices.GetUninitializedObject(typeof(SqlException));
 
         private DateTimeOffset GetRandomDateTime() =>
             DateTimeOffset.UtcNow;
