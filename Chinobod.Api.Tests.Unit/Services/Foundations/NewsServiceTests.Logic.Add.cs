@@ -11,10 +11,15 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
         public async Task ShouldAddNewsAsync()
         {
             //given
-            News randomNews = CreateRandomNews(GetRandomDateTime());
+            DateTimeOffset currentDate = GetEarlierDateTime();
+            News randomNews = CreateRandomNews(currentDate);
             News inputNews = randomNews;
             News storageNews = inputNews;
             News expectedNews = storageNews.DeepClone();
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Returns(currentDate);
 
             this.storageBrokerMock.Setup(broker =>
                 broker.InsertNewsAsync(inputNews))
@@ -27,10 +32,15 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
             //then
             actualNews.Should().BeEquivalentTo(expectedNews);
 
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(),
+                    Times.Once);
+
             this.storageBrokerMock.Verify(broker =>
                 broker.InsertNewsAsync(inputNews),
                     Times.Once);
 
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }

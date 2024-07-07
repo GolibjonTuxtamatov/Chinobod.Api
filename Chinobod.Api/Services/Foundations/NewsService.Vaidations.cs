@@ -13,7 +13,8 @@ namespace Chinobod.Api.Services.Foundations
             Validate((Rule: IsInvalid(news.Id), Parameter: nameof(News.Id)),
                     (Rule: IsInvalid(news.Tile), Parameter: nameof(News.Tile)),
                     (Rule: IsInvalid(news.Description), Parameter: nameof(News.Description)),
-                    (Rule: IsInvalid(news.CreatedDate), Parameter: nameof(News.CreatedDate)));
+                    (Rule: IsInvalid(news.CreatedDate), Parameter: nameof(News.CreatedDate)),
+                    (Rule: IsDateNotNow(news.CreatedDate), Parameter: nameof(News.CreatedDate)));
         }
 
         private static void ValidateNotNull(News nullNews)
@@ -39,6 +40,22 @@ namespace Chinobod.Api.Services.Foundations
             Condition = date == default,
             Message = "Date is required"
         };
+
+        private dynamic IsDateNotNow(DateTimeOffset earlierDate) => new
+        {
+            Condition = !ShouldDateBeNow(earlierDate),
+            Message = "Date should be now"
+        };
+
+        private bool ShouldDateBeNow(DateTimeOffset earlierDate)
+        {
+            DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
+
+            if(currentDate == earlierDate)
+                return true;
+
+            return false;
+        }
 
         private static void Validate(params (dynamic Rule,string Parameter)[] values)
         {

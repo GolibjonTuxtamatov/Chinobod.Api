@@ -115,7 +115,7 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset())
-                    .Returns(earlierDate);
+                    .Throws(invalidNewsException);
 
             var expectedNewsValidationException =
                 new NewsValidationException(invalidNewsException);
