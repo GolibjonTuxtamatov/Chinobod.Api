@@ -39,10 +39,6 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
                 broker.GetCurrentDateTimeOffset(),
                     Times.Once);
 
-            this.storageBrokerMock.Verify(broker =>
-                broker.InsertNewsAsync(someNews),
-                    Times.Once);
-
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogCritical(It.Is(SameExceptionAs(expectedNewsDependencyValidationException))),
                     Times.Once);

@@ -1,5 +1,6 @@
 ﻿using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Models.Foundations.News.Exceptions;
+using Microsoft.Data.SqlClient;
 using Xeptions;
 
 namespace Chinobod.Api.Services.Foundations
@@ -22,6 +23,13 @@ namespace Chinobod.Api.Services.Foundations
             {
                 throw CreateAndLogValidationException(invalidNewsException);
             }
+            catch (SqlException sqlException)
+            {
+                var failedNewsStorageException =
+                    new FailedNewsStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyValidationException(failedNewsStorageException);
+            }
         }
 
         private Xeption CreateAndLogValidationException(Xeption exception)
@@ -33,6 +41,17 @@ namespace Chinobod.Api.Services.Foundations
             this.loggingBroker.LogError(newsValidationException);
 
             return newsValidationException;
+        }
+        
+        private Xeption CreateAndLogCriticalDependencyValidationException(Xeption exception)
+        {
+
+            var newsDependencyValidationException =
+                new NewsDependencyValidationException(exception);
+
+            this.loggingBroker.LogCritical(newsDependencyValidationException);
+
+            return newsDependencyValidationException;
         }
     }
 }
