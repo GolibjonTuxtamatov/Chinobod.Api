@@ -27,7 +27,7 @@ namespace Chinobod.Api.Services.Foundations
         public ValueTask<News> AddNewsAsync(News news) =>
             TryCatch(async () =>
             {
-                ValidateNotNull(news);
+                ValidateNewsOnAdd(news);
 
                 return await this.storageBroker.InsertNewsAsync(news);
             });

@@ -65,7 +65,7 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             invalidNewsException.AddData(
                 key: nameof(News.Tile),
-                values: "Text is reuqired");
+                values: "Text is required");
 
             invalidNewsException.AddData(
                 key: nameof(News.Description),

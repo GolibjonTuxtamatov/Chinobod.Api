@@ -18,6 +18,10 @@ namespace Chinobod.Api.Services.Foundations
             {
                 throw CreateAndLogValidationException(nullNewsException);
             }
+            catch (InvalidNewsException invalidNewsException)
+            {
+                throw CreateAndLogValidationException(invalidNewsException);
+            }
         }
 
         private Xeption CreateAndLogValidationException(Xeption exception)
