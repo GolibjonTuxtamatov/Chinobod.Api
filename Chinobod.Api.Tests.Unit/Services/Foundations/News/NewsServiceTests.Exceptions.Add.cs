@@ -20,6 +20,10 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset())
+                    .Returns(currentDate);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertNewsAsync(someNews))
                     .Throws(sqlException);
 
             var failedNewsStorageException = new FailedNewsStorageException(sqlException);
@@ -38,6 +42,10 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             this.dateTimeBrokerMock.Verify(broker =>
                 broker.GetCurrentDateTimeOffset(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertNewsAsync(someNews),
                     Times.Once);
 
             this.loggingBrokerMock.Verify(broker =>
@@ -65,6 +73,10 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
 
             this.dateTimeBrokerMock.Setup(broker =>
                 broker.GetCurrentDateTimeOffset())
+                    .Returns(randomTime);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertNewsAsync(someNews))
                     .Throws(duplicateKeyException);
 
             var expectedNewsDependenccyValidationException =
@@ -91,6 +103,10 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
             this.loggingBrokerMock.Verify(broker =>
                 broker.LogError(It.Is(SameExceptionAs(expectedNewsDependenccyValidationException))),
                     Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Models.Foundations.News.Exceptions;
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using Xeptions;
 
@@ -30,6 +31,13 @@ namespace Chinobod.Api.Services.Foundations
 
                 throw CreateAndLogCriticalDependencyValidationException(failedNewsStorageException);
             }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistNewsException =
+                    new AlreadyExistNewsException(duplicateKeyException);
+
+                throw CreateAndLogDependencyValidationException(alreadyExistNewsException);
+            }
         }
 
         private Xeption CreateAndLogValidationException(Xeption exception)
@@ -50,6 +58,17 @@ namespace Chinobod.Api.Services.Foundations
                 new NewsDependencyValidationException(exception);
 
             this.loggingBroker.LogCritical(newsDependencyValidationException);
+
+            return newsDependencyValidationException;
+        }
+        
+        private Xeption CreateAndLogDependencyValidationException(Xeption exception)
+        {
+
+            var newsDependencyValidationException =
+                new NewsDependencyValidationException(exception);
+
+            this.loggingBroker.LogError(newsDependencyValidationException);
 
             return newsDependencyValidationException;
         }
