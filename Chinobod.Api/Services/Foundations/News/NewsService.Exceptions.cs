@@ -38,6 +38,13 @@ namespace Chinobod.Api.Services.Foundations
 
                 throw CreateAndLogDependencyValidationException(alreadyExistNewsException);
             }
+            catch (Exception serviceException)
+            {
+                var failedNewsServiceException =
+                    new FailedNewsServiceException(serviceException);
+
+                throw CreateAndLogServiceException(failedNewsServiceException);
+            }
         }
 
         private Xeption CreateAndLogValidationException(Xeption exception)
@@ -71,6 +78,17 @@ namespace Chinobod.Api.Services.Foundations
             this.loggingBroker.LogError(newsDependencyValidationException);
 
             return newsDependencyValidationException;
+        }
+        
+        private Xeption CreateAndLogServiceException(Xeption exception)
+        {
+
+            var newsServiceException =
+                new NewsServiceException(exception);
+
+            this.loggingBroker.LogError(newsServiceException);
+
+            return newsServiceException;
         }
     }
 }
