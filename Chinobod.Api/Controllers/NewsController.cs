@@ -1,4 +1,5 @@
 ﻿using Chinobod.Api.Models.Foundations.News;
+using Chinobod.Api.Models.Foundations.News.Exceptions;
 using Chinobod.Api.Services.Foundations;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -17,9 +18,34 @@ namespace Chinobod.Api.Controllers
         [HttpPost]
         public async ValueTask<ActionResult<News>> PostNewsAsync(News news)
         {
-            News postedNews = await this.newsService.AddNewsAsync(news);
+            try
+            {
+                News postedNews = await this.newsService.AddNewsAsync(news);
 
-            return Created(postedNews);
+                return Created(postedNews);
+            }
+            catch (NewsValidationException newsValidationException)
+            {
+                return BadRequest(newsValidationException.InnerException);
+            }
+            catch (NewsDependencyValidationException newsDependencyValidationException)
+                when(newsDependencyValidationException.InnerException is AlreadyExistNewsException)
+            {
+                return Conflict(newsDependencyValidationException.InnerException);
+            }
+            catch (NewsDependencyValidationException newsDependencyValidationException)
+                when(newsDependencyValidationException is FailedNewsStorageException)
+            {
+                return InternalServerError(newsDependencyValidationException.InnerException);
+            }
+            catch (NewsDependencyValidationException newsDependencyValidationException)
+            {
+                return BadRequest(newsDependencyValidationException.InnerException);
+            }
+            catch (NewsServiceException newsServiceException)
+            {
+                return InternalServerError(newsServiceException.InnerException);
+            }
         }
 
 
