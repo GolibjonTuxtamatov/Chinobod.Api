@@ -108,5 +108,55 @@ namespace Chinobod.Api.Tests.Unit.Services.Foundations
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfErrorOccursAndLogItAsync()
+        {
+            //given
+            DateTimeOffset randomDate = GetRandomDateTime();
+            News someNews = CreateRandomNews(randomDate);
+
+            var serviceException = new Exception();
+
+            var failedNewsServiceException =
+                new FailedNewsServiceException(serviceException);
+
+            this.dateTimeBrokerMock.Setup(broker =>
+                broker.GetCurrentDateTimeOffset())
+                    .Returns(randomDate);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertNewsAsync(someNews))
+                    .ThrowsAsync(serviceException);
+
+            var expectedNewsServiceException =
+                new NewsServiceException(failedNewsServiceException);
+
+            //when
+            ValueTask<News> addNewsTask =
+                this.newsService.AddNewsAsync(someNews);
+
+            NewsServiceException actualNewsServiceException =
+                await Assert.ThrowsAsync<NewsServiceException>(addNewsTask.AsTask);
+
+            //then
+            actualNewsServiceException.Should().BeEquivalentTo(expectedNewsServiceException);
+
+            this.dateTimeBrokerMock.Verify(broker =>
+                broker.GetCurrentDateTimeOffset(),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertNewsAsync(someNews),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(expectedNewsServiceException))),
+                    Times.Once);
+
+            this.dateTimeBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
