@@ -12,7 +12,9 @@ namespace Chinobod.Api.Brokers.Storages
             await InsertAsync(news);
 
         public IQueryable<News> SelectAllNews() =>
-            SelectAll<News>();
+            SelectAll<News>()
+            .OrderBy(news => news.ShouldDelete)
+            .OrderByDescending(news => news);
 
         public async ValueTask<News> SelectNewsByIdAsync(Guid id) =>
             await SelectByIdAsync<News>(id);
