@@ -1,5 +1,4 @@
-﻿using Chinobod.Api.Models.Foundations;
-using EFxceptions;
+﻿using EFxceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chinobod.Api.Brokers.Storages
@@ -30,7 +29,7 @@ namespace Chinobod.Api.Brokers.Storages
         public async ValueTask<T> SelectByIdAsync<T>(params object[] objectsId) where T : class
         {
             using var broker = new StorageBroker();
-            
+
             return await broker.FindAsync<T>(objectsId);
         }
 
@@ -55,10 +54,10 @@ namespace Chinobod.Api.Brokers.Storages
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string connectionString = "Data Source = ./Data/Chinobod.db";
-            
+
             optionsBuilder.UseSqlite(connectionString);
         }
 
-        public override void Dispose(){ }
+        public override void Dispose() { }
     }
 }

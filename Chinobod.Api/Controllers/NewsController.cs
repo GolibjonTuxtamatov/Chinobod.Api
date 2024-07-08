@@ -1,4 +1,4 @@
-﻿using Chinobod.Api.Models.Foundations;
+﻿using Chinobod.Api.Models.Foundations.News;
 using Chinobod.Api.Services.Foundations;
 using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
@@ -17,7 +17,7 @@ namespace Chinobod.Api.Controllers
         [HttpPost]
         public async ValueTask<ActionResult<News>> PostNewsAsync(News news)
         {
-            News postedNews = await this.newsService.AddNewsASync(news);
+            News postedNews = await this.newsService.AddNewsAsync(news);
 
             return Created(postedNews);
         }

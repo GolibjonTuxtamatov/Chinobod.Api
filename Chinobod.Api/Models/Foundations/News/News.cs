@@ -1,4 +1,4 @@
-﻿namespace Chinobod.Api.Models.Foundations
+﻿namespace Chinobod.Api.Models.Foundations.News
 {
     public class News
     {

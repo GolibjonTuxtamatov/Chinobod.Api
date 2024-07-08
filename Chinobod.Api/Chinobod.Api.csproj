@@ -20,6 +20,7 @@
     </PackageReference>
     <PackageReference Include="RESTFulSense" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Xeption" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
