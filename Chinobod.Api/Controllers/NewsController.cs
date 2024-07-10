@@ -56,7 +56,7 @@ namespace Chinobod.Api.Controllers
         [HttpGet("{id}")]
         public async ValueTask<ActionResult<News>> GetNewsByIdAsync(Guid id)
         {
-            News foundNews = await this.newsService.SelectNewsByIdAsync(id);
+            News foundNews = await this.newsService.RetrieveNewsByIdAsync(id);
 
             return Ok(foundNews);
         }

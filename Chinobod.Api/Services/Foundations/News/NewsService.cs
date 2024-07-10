@@ -44,7 +44,7 @@ namespace Chinobod.Api.Services.Foundations
         public IQueryable<News> RetriveAllNews() =>
             this.storageBroker.SelectAllNews();
 
-        public async ValueTask<News> SelectNewsByIdAsync(Guid id) =>
-            await this.SelectNewsByIdAsync(id);
+        public async ValueTask<News> RetrieveNewsByIdAsync(Guid id) =>
+            await this.storageBroker.SelectNewsByIdAsync(id);
     }
 }
