@@ -42,7 +42,7 @@ namespace Chinobod.Api.Services.Foundations
 
         private dynamic IsDateNotNow(DateTimeOffset earlierDate) => new
         {
-            Condition = !ShouldDateBeNow(earlierDate),
+            Condition = ShouldDateBeNow(earlierDate),
             Message = "Date should be now"
         };
 
@@ -50,10 +50,9 @@ namespace Chinobod.Api.Services.Foundations
         {
             DateTimeOffset currentDate = this.dateTimeBroker.GetCurrentDateTimeOffset();
 
-            if (currentDate == earlierDate)
-                return true;
-
-            return false;
+            TimeSpan timeDifference = currentDate.Subtract(earlierDate);
+                
+            return timeDifference.TotalSeconds is > 60 or < 0;
         }
 
         private static void Validate(params (dynamic Rule, string Parameter)[] values)
