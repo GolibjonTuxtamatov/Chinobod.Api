@@ -24,5 +24,13 @@ namespace Chinobod.Api.Brokers.Storages
 
         public async ValueTask<News> DeleteNewsASync(News news) =>
             await DeleteAsync(news);
+
+        public async ValueTask DeleteNotNeedNews(IQueryable<News> news)
+        {
+            using var broker = new StorageBroker();
+
+            broker.RemoveRange(news);
+            await broker.SaveChangesAsync();
+        }
     }
 }
