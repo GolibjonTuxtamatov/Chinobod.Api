@@ -76,5 +76,9 @@ namespace Chinobod.Api.Controllers
 
             return Ok(deletedNews);
         }
+
+        [HttpDelete]
+        public async ValueTask DeleteNotNeedNewsAsync() =>
+            await this.newsService.RemoveNotNeedNewsAsync();
     }
 }
