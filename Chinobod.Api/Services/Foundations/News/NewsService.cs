@@ -41,8 +41,20 @@ namespace Chinobod.Api.Services.Foundations
             return await this.storageBroker.DeleteNewsASync(storageNews);
         }
 
-        public IQueryable<News> RetriveAllNews() =>
-            this.storageBroker.SelectAllNews();
+        public IQueryable<News> RetriveAllNews()
+        {
+            var sortedNewses = new List<News>();
+
+            var newses = this.storageBroker.SelectAllNews();
+
+            sortedNewses.AddRange(newses.Select(news => news)
+                                        .Where(news => news.ShouldDelete == false));
+
+            sortedNewses.AddRange(newses.Select(news => news)
+                                        .Where(news => news.ShouldDelete == true));
+
+            return sortedNewses.AsQueryable();
+        }
 
         public async ValueTask<News> RetrieveNewsByIdAsync(Guid id) =>
             await this.storageBroker.SelectNewsByIdAsync(id);
