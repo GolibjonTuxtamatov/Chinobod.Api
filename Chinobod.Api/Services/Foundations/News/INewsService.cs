@@ -9,5 +9,6 @@ namespace Chinobod.Api.Services.Foundations
         public ValueTask<News> RetrieveNewsByIdAsync(Guid id);
         public ValueTask<News> ModifyNewsAsync(News news);
         public ValueTask<News> RemoveNewsAsync(Guid id);
+        public ValueTask RemoveNotNeedNewsAsync();
     }
 }
