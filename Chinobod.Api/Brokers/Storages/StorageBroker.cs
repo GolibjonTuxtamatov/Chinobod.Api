@@ -53,7 +53,7 @@ namespace Chinobod.Api.Brokers.Storages
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Data Source = ./Data/Chinobod.db";
+            string connectionString = "Data Source = Chinobod.db";
 
             optionsBuilder.UseSqlite(connectionString);
         }
