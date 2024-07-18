@@ -61,10 +61,13 @@ namespace Chinobod.Api.Services.Foundations
 
         public async ValueTask RemoveNotNeedNewsAsync()
         {
+            DateTimeOffset aWeekAgo = DateTimeOffset.Now.AddDays(-7);
+
             var notNeedNewses =
                 this.storageBroker.SelectAllNews()
                 .Select(news => news)
-                .Where(news => news.ShouldDelete == true);
+                .Where(news => news.ShouldDelete == true
+                                && news.CreatedDate <= aWeekAgo);
 
             await this.storageBroker.DeleteNotNeedNews(notNeedNewses);
         }
